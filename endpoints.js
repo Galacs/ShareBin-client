@@ -1,0 +1,1 @@
+export const api_url = "https://sharebin-server.ait-younes.fr";
