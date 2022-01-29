@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <h2 v-if="isLogin">Login</h2>
+    <h2 v-if="isLogin">Se connecter</h2>
     <h2 v-else>Register</h2>
-    <input @keyup.enter="post" v-model="username" type="text" placeholder="Username" />
-    <input @keyup.enter="post" v-model="password" type="password" placeholder="Password" />
-    <button v-if="props.isLogin" @click="post">Login</button>
-    <button v-else>Register</button>
-    <h1>{{ username }}</h1>
-    <h1>{{ password }}</h1>
+    <input @keyup.enter="post" v-model="username" type="text" placeholder="Nom d'utilisateur" />
+    <input @keyup.enter="post" v-model="password" type="password" placeholder="Mot de passe" />
+    <button class="login-btn" v-if="props.isLogin" @click="post">Se connecter</button>
+    <button class="login-btn" v-else>S'enregistrer</button>
+    <!-- <h1>{{ username }}</h1>
+    <h1>{{ password }}</h1> -->
   </div>
 </template>
 
@@ -46,27 +46,31 @@ async function post() {
 </script>
 
 <style scoped>
-input {
-    margin-top: 1%;
-    margin-bottom: 1%;
+button {
+  position: inherit;
+  margin: 0;
 }
 
 .container {
-   display: flex;
-   flex-direction: column;
-    text-align: left;
-    margin-bottom: 20px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+}
+
+h2 {
+  margin: 0 auto;
 }
 
 input {
     font-size: 17px;
     height: 45px;
-    width: 250px;
-    margin: 0 auto;
+    /* width: 250px; */
+    margin: 1rem auto;
     vertical-align: baseline;
     /* padding: 6px 0 6px 50px; */
-    margin: 0 auto;
     border: 2px solid #eee;
     border-radius: 5px;
     box-shadow: none;

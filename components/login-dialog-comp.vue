@@ -1,18 +1,33 @@
 <template>
-  <div class="popup">
+  <div @click="" class="popup">
       <div class="popup-inner">
           <slot />
+          <div class="container">
+            <a @click="close">Fermer</a>
+            <a v-if="isLogin" @click="setregisterDialog">Créer un compte</a>
+            <a v-else @click="setdialog">Se connecter</a>
+          </div>
       </div>
   </div>
 </template>
 
 <script setup>
 
-
+const props = defineProps({
+  setdialog: Function,
+  setregisterDialog: Function,
+  close: Function,
+  isLogin: Boolean,
+})
 
 </script>
 
 <style>
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
 .popup {
 	position: fixed;
 	top: 0;
@@ -33,4 +48,15 @@
     border-width: 3px;
     border-style: solid;
 }
+
+a {
+    text-decoration: underline;
+    color: grey;
+    cursor: pointer;
+}
+
+a:hover {
+    color: rgb(70, 70, 70);
+}
+
 </style>

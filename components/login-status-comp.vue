@@ -1,13 +1,32 @@
 <template>
   <div>
-      <button class="login-btn">{{ text }}</button>
+    <Popup v-if="loginDialog" :dialog="() => loginDialog = false" :isLogin="loginDialog"
+    :close="() => { registerDialog = false; loginDialog = false }"
+    :setregisterDialog="() => {registerDialog = true; loginDialog=false}"
+    >
+      <AuthComponent :isLogin='true' class="AuthComponent"/>
+    </Popup>
+
+    <Popup v-if="registerDialog" :dialog="() => loginDialog = false" :isLogin="loginDialog"
+    :close="() => { registerDialog = false; loginDialog = false }"
+    :setdialog="() => {registerDialog = false; loginDialog=true}"
+    >
+      <AuthComponent :isLogin='false' class="AuthComponent"/>
+    </Popup>
+      <button @click="loginDialog = true" class="login-btn">{{ text }}</button>
   </div>
 </template>
 
 <script setup>
 import { api_url } from '@/endpoints.js';
 
+import AuthComponent from '@/components/auth.vue'
+import Popup from '@/components/login-dialog-comp.vue'
+
 var text = "Login"
+
+var loginDialog = ref(false)
+var registerDialog = ref(false)
 
 </script>
 

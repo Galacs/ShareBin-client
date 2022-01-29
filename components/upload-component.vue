@@ -59,9 +59,6 @@ var handleFileUpload = async() => {
 </script>
 
 <style>
-.AuthComponent {
-  margin-left: 40%;
-  margin-right: 40%;
-}
+/*  */
 
 </style>

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <Popup>
-      <AuthComponent :isLogin='true' class="AuthComponent"/>
-    </Popup>
+    
   </div>
 </template>
 
@@ -14,9 +12,9 @@ import Popup from '@/components/login-dialog-comp.vue'
 </script>
 
 <style>
-.AuthComponent {
+/* .AuthComponent {
   margin-left: 40%;
   margin-right: 40%;
-}
+} */
 
 </style>
