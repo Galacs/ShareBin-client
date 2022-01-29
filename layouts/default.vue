@@ -1,4 +1,5 @@
 <template>
+    <login-status-comp />
     <!-- <top-navbar /> -->
     <slot />
 

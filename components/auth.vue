@@ -54,5 +54,22 @@ input {
 .container {
    display: flex;
    flex-direction: column;
+    text-align: left;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+input {
+    font-size: 17px;
+    height: 45px;
+    width: 250px;
+    margin: 0 auto;
+    vertical-align: baseline;
+    /* padding: 6px 0 6px 50px; */
+    margin: 0 auto;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    box-shadow: none;
+    outline: none;
 }
 </style>
