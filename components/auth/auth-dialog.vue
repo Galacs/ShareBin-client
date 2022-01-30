@@ -44,7 +44,7 @@ const props = defineProps({
     background: #FFF;
     padding: 32px;
     border-radius: 10px;
-    border: rgb(75, 74, 74);
+    border: rgb(105, 104, 104);
     border-width: 3px;
     border-style: solid;
 }

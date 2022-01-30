@@ -1,10 +1,12 @@
 <template>
-    <login-status-comp />
+    <auth-status />
     <!-- <top-navbar /> -->
     <slot />
 
     <!-- <h2>Footer</h2> -->
 </template>
+
+
 
 <style>
 body {

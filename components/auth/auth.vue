@@ -1,11 +1,17 @@
 <template>
   <div class="container">
     <h2 v-if="isLogin">Se connecter</h2>
-    <h2 v-else>Register</h2>
+    <h2 v-else>S'enregistrer</h2>
     <input @keyup.enter="post" v-model="username" type="text" placeholder="Nom d'utilisateur" />
     <input @keyup.enter="post" v-model="password" type="password" placeholder="Mot de passe" />
     <button class="login-btn" v-if="props.isLogin" @click="post">Se connecter</button>
     <button class="login-btn" v-else>S'enregistrer</button>
+    <div v-if="state.success" class="success state">
+      {{ state.message }}
+    </div>
+    <div v-if="state.error" class="error state">
+      {{ state.message }}
+    </div>
     <!-- <h1>{{ username }}</h1>
     <h1>{{ password }}</h1> -->
   </div>
@@ -18,6 +24,12 @@ const props = defineProps({
 
 let username = ref();
 let password = ref();
+
+let state = ref({
+  success: false,
+  error: false,
+  message: "",
+});
 
 import { api_url } from '@/endpoints.js';
 
@@ -37,9 +49,15 @@ async function post() {
           if (data.success) {
             console.log('nice');
             console.log(data);
+            state.value.success = true;
+            state.value.error = false;
+            state.value.message = "Connection réussite"
           }
           else {
             console.log(data);
+            state.value.error = true;
+            state.value.success = false;
+            state.value.message = data.msg;
           }
         })
     };
@@ -75,5 +93,26 @@ input {
     border-radius: 5px;
     box-shadow: none;
     outline: none;
+}
+
+.state {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.158);
+  font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.25px;
+  line-height: 16px;
+}
+
+.error {
+  background-color: rgb(236, 147, 31);
+}
+
+.success {
+  background-color: rgb(106, 236, 31);
 }
 </style>
