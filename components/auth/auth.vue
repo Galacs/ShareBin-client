@@ -83,16 +83,17 @@ h2 {
 }
 
 input {
-    font-size: 17px;
-    height: 45px;
-    /* width: 250px; */
-    margin: 1rem auto;
-    vertical-align: baseline;
-    /* padding: 6px 0 6px 50px; */
-    border: 2px solid #eee;
-    border-radius: 5px;
-    box-shadow: none;
-    outline: none;
+  padding-left: 1rem;
+  font-size: 17px;
+  height: 45px;
+  /* width: 250px; */
+  margin: 1rem auto;
+  vertical-align: baseline;
+  /* padding: 6px 0 6px 50px; */
+  border: 2px solid #eee;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
 }
 
 .state {
