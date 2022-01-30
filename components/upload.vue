@@ -20,11 +20,12 @@ var fileid = ref();
 var fileurl = ref();
 
 var filename = '';
-// sanitize filename
+
 var submitFile = async() => {
   console.log(filename);
+  console.log(encodeURI(filename));
   console.log(file.value.files[0]);
-  fetch(`${api_url}/files?filename=${filename}&expiration=1701983624`, 
+  fetch(`${api_url}/files?filename=${encodeURI(filename)}&expiration=1701983624`, 
   {
     method: 'post',
     headers: { 'content-type': 'application/octet-stream' },
@@ -58,7 +59,6 @@ var handleFileUpload = async() => {
 
 </script>
 
-<style>
-/*  */
+<style scoped>
 
 </style>

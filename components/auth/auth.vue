@@ -5,7 +5,7 @@
     <input @keyup.enter="post" v-model="username" type="text" placeholder="Nom d'utilisateur" />
     <input @keyup.enter="post" v-model="password" type="password" placeholder="Mot de passe" />
     <button class="login-btn" v-if="props.isLogin" @click="post">Se connecter</button>
-    <button class="login-btn" v-else>S'enregistrer</button>
+    <button class="login-btn" v-else               @click="post">S'enregistrer</button>
     <div v-if="state.success" class="success state">
       {{ state.message }}
     </div>
