@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import AuthComponent from '@/components/auth.vue'
-import Upload from '@/components/upload-component.vue'
+import AuthComponent from '@/components/auth/auth.vue'
+import Upload from '@/components/upload.vue'
 
 </script>

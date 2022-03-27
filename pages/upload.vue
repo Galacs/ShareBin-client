@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import Upload from '@/components/upload-component.vue'
+import Upload from '@/components/upload.vue'
 
 </script>
 
