@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import FileList from '~~/components/file-list.vue';
+import FileList from '@/components/file-list.vue';
 
 </script>
 
