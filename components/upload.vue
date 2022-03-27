@@ -17,6 +17,7 @@
         <div id="start">
           <i class="fa fa-download" aria-hidden="true"></i>
           <div>Choisissez un fichier ou faite glisser</div>
+          <div id="notimage" class="hidden">Please select an image</div>
           <span id="file-upload-btn" class="btn btn-primary">Choisissez un fichier </span>
         </div>
         <div id="response" class="hidden">
