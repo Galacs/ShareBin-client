@@ -1,1 +1,1 @@
-export const api_url = "https://sharebin-server.ait-younes.fr";
+export const api_url = "https://sharebin-server-prod.ait-younes.fr";

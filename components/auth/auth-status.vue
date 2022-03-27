@@ -54,6 +54,9 @@ var check = async() => {
         console.log(data);
       }
     })
+    .catch(async e => {
+      // console.log("no tings")
+    });
 }
 
 await check();
