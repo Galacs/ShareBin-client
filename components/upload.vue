@@ -22,8 +22,8 @@
         </div>
         <div id="response" class="hidden">
           <div id="messages"></div>
-          <progress class="progress" id="file-progress" value="0">
-            <span>0</span>%
+          <progress class="progress" id="file-progress" :value="progressBarValue" :max="progressBarMaxValue">
+            <span>{{ progressBarValue }}</span>%
           </progress>
         </div>
       </label>
@@ -34,6 +34,9 @@
 
 <script setup>
 import { api_url } from '@/endpoints.js';
+
+const progressBarValue = ref(0);
+const progressBarMaxValue = ref(0);
 
 const file = ref(null)
 
@@ -134,44 +137,21 @@ function ekUpload() {
     output(
       '<strong>' + file.name + '</strong>'
     );
-
-    // var fileType = file.type;
-    // console.log(fileType);
-    // var imageName = file.name;
-
-    // var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
-    // if (isGood) {
     document.getElementById('start').classList.add("hidden");
     document.getElementById('response').classList.remove("hidden");
     document.getElementById('notimage').classList.add("hidden");
-    // Thumbnail Preview
-    // document.getElementById('file-image').classList.remove("hidden");
-    // document.getElementById('file-image').src = URL.createObjectURL(file);
-    // }
-    // else {
-    //   document.getElementById('file-image').classList.add("hidden");
-    //   document.getElementById('notimage').classList.remove("hidden");
-    //   document.getElementById('start').classList.remove("hidden");
-    //   document.getElementById('response').classList.add("hidden");
-    //   document.getElementById("file-upload-form").reset();
-    // }
   }
 
   function setProgressMaxValue(e) {
-    var pBar = document.getElementById('file-progress');
-
     if (e.lengthComputable) {
       console.log('size: ' + filesize);
-      pBar.max = filesize;
+      progressBarMaxValue.value = filesize;
     }
   }
 
   function updateFileProgress(e) {
-    var pBar = document.getElementById('file-progress');
-    console.log(e.loaded);
-
     if (e.lengthComputable) {
-      pBar.value = e.loaded;
+      progressBarValue.value = e.loaded;
     }
   }
 
