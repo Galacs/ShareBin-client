@@ -14,16 +14,16 @@
 
       <label for="file-upload" id="file-drag">
         <img id="file-image" src="#" alt="Preview" class="hidden" />
-        <div id="start">
+        <div id="start" ref="start">
           <i class="fa fa-download" aria-hidden="true"></i>
           <div>Choisissez un fichier ou faite glisser</div>
           <div id="notimage" class="hidden">Please select an image</div>
           <span id="file-upload-btn" class="btn btn-primary">Choisissez un fichier </span>
         </div>
-        <div id="response" class="hidden" v-for="i in files">
-          <div id="messages">{{ i.message }}</div>
-          <progress class="progress" id="file-progress" :value="i.progressBarValue" :max="i.progressBarMaxValue">
-            <span>{{ progressBarValue }}</span>%
+        <div id="response" ref="response" class="hidden" v-for="i in files">
+          <div id="messages" ref="message">{{ i.message }}</div>
+          <progress ref="pBar" class="progress" id="file-progress" :value="i.progressBarValue" :max="i.progressBarMaxValue">
+            <span>{{ i.progressBarValue }}</span>%
           </progress>
         </div>
       </label>
@@ -35,12 +35,11 @@
 <script setup>
 import { api_url } from '@/endpoints.js';
 
-const progressBarValue = ref(0);
-const progressBarMaxValue = ref(0);
-
 const file = ref(null)
 
-const files = ref<Array<Object>>([]);
+const start = ref([]);
+
+const files = ref([]);
 
 var fileid = ref();
 var fileurl = ref();
@@ -113,14 +112,17 @@ function ekUpload() {
 
   function fileSelectHandler(e) {
     // Fetch FileList object
-    var files = e.target.files || e.dataTransfer.files;
+    var filesd = e.target.files || e.dataTransfer.files;
 
     // Cancel event and hover styling
     fileDragHover(e);
 
     // Process all File objects
-    for (var i = 0, f; f = files[i]; i++) {
-      files[i].filesize = f.size;
+    for (var i = 0, f; f = filesd[i]; i++) {
+      console.log(f.size);
+      files.value.push({});
+      files.value[i].filesize = f.size;
+      console.log(files.value);
       parseFile(f, i);
       uploadFile(f, i);
     }
@@ -131,6 +133,7 @@ function ekUpload() {
     // Response
     // var m = document.getElementById('messages');
     files.value[i].message = msg;
+    console.log('printed: ', msg);
     // m.innerHTML = msg;
   }
 
@@ -141,31 +144,36 @@ function ekUpload() {
       '<strong>' + file.name + '</strong>',
       i
     );
-    document.getElementById('start').classList.add("hidden");
-    document.getElementById('response').classList.remove("hidden");
-    document.getElementById('notimage').classList.add("hidden");
+    // document.getElementById('start').classList.add("hidden");
+    // document.getElementById('response').classList.remove("hidden");
+    // document.getElementById('notimage').classList.add("hidden");
+    // start[i].classList.add("hidden");
+    // response.value[i].classList.remove("hidden");
+    // notimage.value[i].classList.add("hidden");
   }
 
-  function setProgressMaxValue(e) {
+  function setProgressMaxValue(e, ) {
     if (e.lengthComputable) {
       console.log('size: ' + filesize);
-      progressBarMaxValue.value = filesize;
+      i.progressBarMaxValue.value = i.filesize;
     }
   }
 
-  function updateFileProgress(e) {
+  function updateFileProgress(e, i) {
     if (e.lengthComputable) {
-      progressBarValue.value = e.loaded;
+      i.progressBarValue.value = e.loaded;
     }
   }
 
   function uploadFile(file, i) {
     var xhr = new XMLHttpRequest(),
       fileInput = document.getElementById('class-roster-file'),
-      pBar = document.getElementById('file-progress'),
+      // pBar = document.getElementById('file-progress'),
       fileSizeLimit = 1024; // In MB
     if (xhr.upload) {
-      pBar.style.display = 'inline';
+      // response.value[i].$refs.pBar.style.display = 'inline';
+      // console.log(this.$refs.response);
+      // throw 'salut';
       xhr.upload.addEventListener('loadstart', setProgressMaxValue(i=i), false);
       xhr.upload.addEventListener('progress', updateFileProgress(i=i), false);
 
