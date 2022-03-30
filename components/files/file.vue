@@ -1,89 +1,62 @@
 <template>
-  <div class="container">
-    <div v-for="i in files" :key="i.upload" class="popup">
-      <div class="popup-inner">
+    <div class="popup-inner">
         <div class="container">
-          <h2 class="info">{{ i.filename }}</h2>
-          <h3 class="info">{{ i.fileid }}</h3>
-          <h4 class="info">{{ i.upload }}</h4>
-          <a class="btn" :href="getLink(i.fileid)" target="_blank">Télécharger</a>
-          <button class="delete" @click="deleteFile(i.fileid)" target="_blank">Supprimer</button>
-          </div>
-      </div>
+            <h2 class="info">{{ file.filename }}</h2>
+            <h3 class="info">{{ file.fileid }}</h3>
+            <h4 class="info">{{ file.upload }}</h4>
+            <a class="btn" :href="getLink(file.fileid)" target="_blank">Télécharger</a>
+            <button class="delete" @click="deleteFile(file.fileid)" target="_blank">Supprimer</button>
+        </div>
     </div>
-  </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { api_url } from '@/endpoints.js';
+import { IFile } from '@/interfaces/file'
 
-var files = ref();
+const props = defineProps<{
+    file: IFile,
+}>();
 
-const getLink = (id) => {
-  return `${api_url}/files/${id}`
+const emit = defineEmits<{
+    (e: 'update'): void
+}>();
+
+const getLink = (fileid: String) => {
+    return `${api_url}/files/${fileid}`
 }
 
-const deleteFile = async(id) => {
-  fetch(`${api_url}/files/${id}`,
-    {
-      method: 'delete',
-      credentials: 'include'
-    })
-    .then(async res => {
-      const data = await res.json();
-      if (data.success) {
-        console.log('nice');
-        console.log(data);
-        await update();
-      }
-      else {
-        console.log(data);
-      }
-    })
+const deleteFile = async (fileid: String) => {
+    fetch(`${api_url}/files/${fileid}`,
+        {
+            method: 'delete',
+            credentials: 'include'
+        })
+        .then(async res => {
+            const data = await res.json();
+            if (data.success) {
+                console.log(data);
+                emit('update');
+            }
+            else {
+                console.log(data);
+            }
+        })
 }
 
-const update = async() =>{
-  fetch(`${api_url}/account/files`,
-    {
-      method: 'get',
-      credentials: 'include',
-    })
-    .then(async res => {
-      const data = await res.json();
-      console.log(data);
-      files.value = data;
-    })
-    .catch(async e => {
-      // console.log("no tings")
-    });
-}
-await update();
 </script>
 
-<style scoped>
-/* .container {
-  display: flex;
-  flex-direction: column;
-}
-.file {
-  background-color: aqua;
-}
- */
 
+<style>
 .info {
   margin: 0px;
 }
 
-.container .container {
+.container {
   display: flex;
   flex-direction: column;
 }
 
-.container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
 
 .popup {
 	bottom: 0;
@@ -100,31 +73,12 @@ await update();
   border-style: solid;
 }
 
-@mixin max-width($width) {
-	@media screen and (max-width: $width) {
-		@content;
-	}
-}
 .popup {
 	background-color: tomato;
 	box-sizing: border-box;
 	padding: 20px;
 	outline: 2px solid blue;
 	/* flex: 1; */
-}
-
-@include max-width(992px) {
-	.popup {
-		flex-basis: 25%;
-		background-color: red;
-	}
-}
-
-@include max-width(640px) {
-	.popup {
-		flex-basis: 50%;
-		background-color: green;
-	}
 }
 
 .btn {
@@ -180,5 +134,4 @@ await update();
   cursor: pointer;
   background: #e92323;
 }
-
 </style>

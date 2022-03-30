@@ -6,8 +6,8 @@
 </template>
 
 <script setup>
-import FileList from '@/components/file-list.vue';
-
+import upload from '@/components/upload.vue';
+import fileList from '@/components/files/fileList.vue';
 </script>
 
 <style scoped>
