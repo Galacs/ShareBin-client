@@ -20,9 +20,9 @@
           <div id="notimage" class="hidden">Please select an image</div>
           <span id="file-upload-btn" class="btn btn-primary">Choisissez un fichier </span>
         </div>
-        <div id="response" class="hidden">
-          <div id="messages"></div>
-          <progress class="progress" id="file-progress" :value="progressBarValue" :max="progressBarMaxValue">
+        <div id="response" class="hidden" v-for="i in files">
+          <div id="messages">{{ i.message }}</div>
+          <progress class="progress" id="file-progress" :value="i.progressBarValue" :max="i.progressBarMaxValue">
             <span>{{ progressBarValue }}</span>%
           </progress>
         </div>
@@ -39,6 +39,8 @@ const progressBarValue = ref(0);
 const progressBarMaxValue = ref(0);
 
 const file = ref(null)
+
+const files = ref<Array<Object>>([]);
 
 var fileid = ref();
 var fileurl = ref();
@@ -118,24 +120,26 @@ function ekUpload() {
 
     // Process all File objects
     for (var i = 0, f; f = files[i]; i++) {
-      filesize = f.size;
-      parseFile(f);
-      uploadFile(f);
+      files[i].filesize = f.size;
+      parseFile(f, i);
+      uploadFile(f, i);
     }
   }
 
   // Output
-  function output(msg) {
+  function output(msg, i) {
     // Response
-    var m = document.getElementById('messages');
-    m.innerHTML = msg;
+    // var m = document.getElementById('messages');
+    files.value[i].message = msg;
+    // m.innerHTML = msg;
   }
 
-  function parseFile(file) {
+  function parseFile(file, i) {
 
     console.log(file.name);
     output(
-      '<strong>' + file.name + '</strong>'
+      '<strong>' + file.name + '</strong>',
+      i
     );
     document.getElementById('start').classList.add("hidden");
     document.getElementById('response').classList.remove("hidden");
@@ -155,28 +159,15 @@ function ekUpload() {
     }
   }
 
-  function uploadFile(file) {
+  function uploadFile(file, i) {
     var xhr = new XMLHttpRequest(),
       fileInput = document.getElementById('class-roster-file'),
       pBar = document.getElementById('file-progress'),
       fileSizeLimit = 1024; // In MB
     if (xhr.upload) {
-      // Check if file is less than x MB
-      // if (file.size <= fileSizeLimit * 1024 * 1024) {
-      // Progress bar
       pBar.style.display = 'inline';
-      xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
-      xhr.upload.addEventListener('progress', updateFileProgress, false);
-
-      // File received / failed
-      xhr.onreadystatechange = function (e) {
-        if (xhr.readyState == 4) {
-          // Everything is good!
-
-          progress.className = (xhr.status == 200 ? "success" : "failure");
-          document.location.reload(true);
-        }
-      };
+      xhr.upload.addEventListener('loadstart', setProgressMaxValue(i=i), false);
+      xhr.upload.addEventListener('progress', updateFileProgress(i=i), false);
 
       // Start upload
       xhr.open('POST', `${api_url}/files?filename=${encodeURI(file.name)}&expiration=1701983624`, true);
@@ -190,9 +181,7 @@ function ekUpload() {
           console.log(xhr.response.url); // Par défault une DOMString
           fileid.value = xhr.response.fileid;
           fileurl.value = xhr.response.url;
-          // if (xhr.response.success) {
-          //   console.log(xhr.response.url);
-          // }
+
         }
       }
       console.log("sending....")
