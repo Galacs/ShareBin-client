@@ -3,7 +3,7 @@
         <div class="container">
             <h2 class="info">{{ file.filename }}</h2>
             <h3 class="info">{{ file.fileid }}</h3>
-            <h4 class="info">{{ file.upload }}</h4>
+            <h4 class="info">{{ formatDate(file.upload) }}</h4>
             <a class="btn" :href="getLink(file.fileid)" target="_blank">Télécharger</a>
             <button class="delete" @click="deleteFile(file.fileid)" target="_blank">Supprimer</button>
         </div>
@@ -24,6 +24,17 @@ const emit = defineEmits<{
 
 const getLink = (fileid: String) => {
     return `${api_url}/files/${fileid}`
+}
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('fr-FR', { 
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric' 
+  });
 }
 
 const deleteFile = async (fileid: String) => {

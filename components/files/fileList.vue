@@ -22,8 +22,9 @@ const update = async() => {
     })
     .then(async res => {
       const data = await res.json();
-      console.log(data);
+      data.forEach(i => {i.upload = new Date(i.upload) });
       files.value = data;
+      console.log(data);
     })
     .catch(async e => {
     });
