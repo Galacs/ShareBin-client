@@ -14,188 +14,164 @@
 
       <label for="file-upload" id="file-drag">
         <img id="file-image" src="#" alt="Preview" class="hidden" />
-        <div id="start">
+        <div id="start" ref="start">
           <i class="fa fa-download" aria-hidden="true"></i>
           <div>Choisissez un fichier ou faite glisser</div>
-          <div id="notimage" class="hidden">Please select an image</div>
-          <span id="file-upload-btn" class="btn btn-primary">Choisissez un fichier </span>
+          <span id="file-upload-btn" class="btn btn-primary">Choisissez un fichier</span>
         </div>
-        <div id="response" class="hidden">
-          <div id="messages"></div>
-          <progress class="progress" id="file-progress" :value="progressBarValue" :max="progressBarMaxValue">
-            <span>{{ progressBarValue }}</span>%
+        <div id="response" ref="response" v-for="i in files">
+          <div id="messages" ref="message">{{ i.message }}</div>
+          <a :href="`${i.fileurl}`">{{ i.fileurl }}</a>
+          <progress
+            ref="pBar"
+            class="progress"
+            id="file-progress"
+            :value="i.progressBarValue"
+            :max="i.progressBarMaxValue"
+          >
+            <span>{{ i.progressBarValue }}</span>%
           </progress>
         </div>
       </label>
     </form>
-    <a :href="`${fileurl}`">{{ fileurl }}</a>
+    <!-- <a v-for="i in fileurl" :href="`${i.fileurl}`">{{ i }}</a> -->
   </div>
 </template>
 
 <script setup>
-import { api_url } from '@/endpoints.js';
+import { api_url } from "@/endpoints.js";
 
-const progressBarValue = ref(0);
-const progressBarMaxValue = ref(0);
+const file = ref(null);
 
-const file = ref(null)
+const start = ref();
+const files = ref([]);
+const response = ref([]);
 
-var fileid = ref();
-var fileurl = ref();
+var fileid = ref([]);
+var fileurl = ref([]);
 
-var filename = '';
+var filename = "";
 
-var submitFile = async () => {
-  console.log(filename);
-  console.log(encodeURI(filename));
-  console.log(file.value.files[0]);
-  fetch(`${api_url}/files?filename=${encodeURI(filename)}&expiration=1701983624`,
-    {
-      method: 'post',
-      headers: { 'content-type': 'application/octet-stream' },
-      credentials: 'include',
-      body: file.value.files[0]
-    })
-    .then(async res => {
-      const data = await res.json();
-      if (data.success) {
-        console.log('nice');
-        console.log(data);
-        fileid.value = data.fileid;
-        fileurl.value = data.url;
-      }
-      else {
-        console.log(data);
-      }
-    })
-  console.log("ye");
-}
-
-// var handleFileUpload = async () => {
-//   console.log("selected file", file.value.files[0].name)
-//   filename = file.value.files[0].name;
+// var submitFile = async () => {
+//   console.log(filename);
+//   console.log(encodeURI(filename));
+//   console.log(file.value.files[0]);
+//   fetch(`${api_url}/files?filename=${encodeURI(filename)}&expiration=1701983624`,
+//     {
+//       method: 'post',
+//       headers: { 'content-type': 'application/octet-stream' },
+//       credentials: 'include',
+//       body: file.value.files[0]
+//     })
+//     .then(async res => {
+//       const data = await res.json();
+//       if (data.success) {
+//         console.log('nice');
+//         console.log(data);
+//         fileid.value = data.fileid;
+//         fileurl.value = data.url;
+//       }
+//       else {
+//         console.log(data);
+//       }
+//     })
+//   console.log("ye");
 // }
 
-let filesize;
 // File Upload
-// 
+//
 function ekUpload() {
   function Init() {
-
     console.log("Upload Initialised");
 
-    var fileSelect = document.getElementById('file-upload'),
-      fileDrag = document.getElementById('file-drag'),
-      submitButton = document.getElementById('submit-button');
+    var fileSelect = document.getElementById("file-upload"),
+      fileDrag = document.getElementById("file-drag");
 
-    fileSelect.addEventListener('change', fileSelectHandler, false);
+    fileSelect.addEventListener("change", fileSelectHandler, false);
 
     // Is XHR2 available?
     var xhr = new XMLHttpRequest();
     if (xhr.upload) {
       // File Drop
-      fileDrag.addEventListener('dragover', fileDragHover, false);
-      fileDrag.addEventListener('dragleave', fileDragHover, false);
-      fileDrag.addEventListener('drop', fileSelectHandler, false);
+      fileDrag.addEventListener("dragover", fileDragHover, false);
+      fileDrag.addEventListener("dragleave", fileDragHover, false);
+      fileDrag.addEventListener("drop", fileSelectHandler, false);
     }
   }
 
   function fileDragHover(e) {
-    var fileDrag = document.getElementById('file-drag');
+    var fileDrag = document.getElementById("file-drag");
 
     e.stopPropagation();
     e.preventDefault();
 
-    fileDrag.className = (e.type === 'dragover' ? 'hover' : 'modal-body file-upload');
+    fileDrag.className =
+      e.type === "dragover" ? "hover" : "modal-body file-upload";
   }
 
   function fileSelectHandler(e) {
     // Fetch FileList object
-    var files = e.target.files || e.dataTransfer.files;
+    var filesd = e.target.files || e.dataTransfer.files;
 
     // Cancel event and hover styling
     fileDragHover(e);
 
     // Process all File objects
-    for (var i = 0, f; f = files[i]; i++) {
-      filesize = f.size;
-      parseFile(f);
-      uploadFile(f);
+    for (var i = 0, f; (f = filesd[i]); i++) {
+      console.log(f.size);
+      files.value.push({});
+      files.value[i].filesize = f.size;
+      files.value[i].progressBarMaxValue = f.size;
+      console.log(files.value);
+      parseFile(f, i);
+      uploadFile(f, i);
     }
   }
 
-  // Output
-  function output(msg) {
-    // Response
-    var m = document.getElementById('messages');
-    m.innerHTML = msg;
+  function parseFile(file, i) {
+    files.value[i].message = file.name;
+    start.value.classList.add("hidden");
   }
 
-  function parseFile(file) {
-
-    console.log(file.name);
-    output(
-      '<strong>' + file.name + '</strong>'
-    );
-    document.getElementById('start').classList.add("hidden");
-    document.getElementById('response').classList.remove("hidden");
-    document.getElementById('notimage').classList.add("hidden");
-  }
-
-  function setProgressMaxValue(e) {
+  function updateFileProgress(i, e) {
     if (e.lengthComputable) {
-      console.log('size: ' + filesize);
-      progressBarMaxValue.value = filesize;
+      files.value[i].progressBarValue = e.loaded;
     }
   }
 
-  function updateFileProgress(e) {
-    if (e.lengthComputable) {
-      progressBarValue.value = e.loaded;
-    }
-  }
-
-  function uploadFile(file) {
-    var xhr = new XMLHttpRequest(),
-      fileInput = document.getElementById('class-roster-file'),
-      pBar = document.getElementById('file-progress'),
-      fileSizeLimit = 1024; // In MB
+  function uploadFile(file, i) {
+    var xhr = new XMLHttpRequest();
     if (xhr.upload) {
-      // Check if file is less than x MB
-      // if (file.size <= fileSizeLimit * 1024 * 1024) {
-      // Progress bar
-      pBar.style.display = 'inline';
-      xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
-      xhr.upload.addEventListener('progress', updateFileProgress, false);
-
-      // File received / failed
-      xhr.onreadystatechange = function (e) {
-        if (xhr.readyState == 4) {
-          // Everything is good!
-
-          progress.className = (xhr.status == 200 ? "success" : "failure");
-          document.location.reload(true);
-        }
-      };
+      xhr.upload.addEventListener(
+        "progress",
+        updateFileProgress.bind(null, i),
+        false
+      );
 
       // Start upload
-      xhr.open('POST', `${api_url}/files?filename=${encodeURI(file.name)}&expiration=1701983624`, true);
+      xhr.open(
+        "POST",
+        `${api_url}/files?filename=${encodeURI(
+          file.name
+        )}&expiration=1701983624`,
+        true
+      );
       // xhr.setRequestHeader('X-File-Name', file.name);
       // xhr.setRequestHeader('X-File-Size', file.size);
-      xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+      xhr.setRequestHeader("Content-Type", "application/octet-stream");
       xhr.withCredentials = true;
-      xhr.responseType = 'json';
+      xhr.responseType = "json";
       xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          console.log(xhr.response.url); // Par défault une DOMString
-          fileid.value = xhr.response.fileid;
-          fileurl.value = xhr.response.url;
-          // if (xhr.response.success) {
-          //   console.log(xhr.response.url);
-          // }
-        }
-      }
-      console.log("sending....")
+        return (function () {
+          if (xhr.readyState === 4) {
+            console.log(xhr.response.url);
+            files.value[i].fileurl = xhr.response.url;
+            fileid.value.push(xhr.response.fileid);
+            fileurl.value.push(xhr.response.url);
+          }
+        })(i);
+      };
+      console.log("sending....");
       xhr.send(file);
       console.log("sent");
     }
@@ -206,12 +182,11 @@ function ekUpload() {
     if (window.File && window.FileList && window.FileReader) {
       Init();
     } else {
-      document.getElementById('file-drag').style.display = 'none';
+      document.getElementById("file-drag").style.display = "none";
     }
   }
 }
 ekUpload();
-
 </script>
 
 <style scoped lang="scss">
