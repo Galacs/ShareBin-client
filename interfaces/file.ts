@@ -3,5 +3,6 @@ export interface IFile {
     ownerid: string,
     filename: string,
     upload: Date,
-    expiration: Date
+    expiration: Date,
+    size: number
 }

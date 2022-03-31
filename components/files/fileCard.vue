@@ -3,6 +3,7 @@
     <div class="container">
       <h2 class="info">{{ file.filename }}</h2>
       <h3 class="info">{{ file.fileid }}</h3>
+      <h4 class="info">{{ formatFileSize(file.size) }}</h4>
       <h4 class="info">{{ formatDate(file.upload) }}</h4>
       <a class="btn" :href="getLink(file.fileid)" target="_blank">Télécharger</a>
       <button class="delete" @click="deleteFile(file.fileid)" target="_blank">Supprimer</button>
@@ -26,7 +27,7 @@ const getLink = (fileid: String) => {
   return `${api_url}/files/${fileid}`;
 };
 
-const formatDate = (date: Date) => {
+const formatDate = (date: Date): string => {
   return date.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
@@ -35,6 +36,11 @@ const formatDate = (date: Date) => {
     minute: "numeric",
     second: "numeric",
   });
+};
+
+function formatFileSize(size: number): string {
+    var i = Math.floor( Math.log(size) / Math.log(1024) );
+    return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 };
 
 const deleteFile = async (fileid: String) => {
