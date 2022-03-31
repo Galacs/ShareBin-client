@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div v-for="i in files" :key="i.fileid" class="popup">
-        <file :file="i" @update="update" />
+        <fileCard :file="i" @update="update" />
       </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import file from '@/components/files/file.vue'
+import fileCard from '~~/components/files/fileCard.vue'
 
 import { api_url } from '@/endpoints.js';
 import { IFile } from '@/interfaces/file'
