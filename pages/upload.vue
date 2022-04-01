@@ -8,7 +8,3 @@
 import Upload from '@/components/upload.vue'
 
 </script>
-
-<style>
-/* */
-</style>

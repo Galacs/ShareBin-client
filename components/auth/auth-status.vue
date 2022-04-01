@@ -63,7 +63,7 @@ await check();
 
 </script>
 
-<style>
+<style scoped>
 .login-btn {
   position: absolute;
   right:0;

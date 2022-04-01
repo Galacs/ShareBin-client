@@ -40,4 +40,16 @@ await update();
   justify-content: flex-start;
 }
 
+.popup {
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: tomato;
+  box-sizing: border-box;
+  padding: 20px;
+  outline: 2px solid blue;
+  /* flex: 1; */
+}
+
 </style>
