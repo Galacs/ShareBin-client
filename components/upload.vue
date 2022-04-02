@@ -362,7 +362,7 @@ form {
     white-space: nowrap;
   }
   #response > div {
-    max-width: 10em;
+    width: 20em;
   }
   .btn {
     display: inline-block;
