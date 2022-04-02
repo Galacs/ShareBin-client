@@ -41,16 +41,12 @@
 <script setup>
 import { api_url } from "@/endpoints.js";
 
-const file = ref(null);
-
 const start = ref();
 const files = ref([]);
 const response = ref([]);
 
 var fileid = ref([]);
 var fileurl = ref([]);
-
-var filename = "";
 
 // var submitFile = async () => {
 //   console.log(filename);
@@ -116,13 +112,10 @@ function ekUpload() {
     // Cancel event and hover styling
     fileDragHover(e);
 
+    files.value = [];
     // Process all File objects
     for (var i = 0, f; (f = filesd[i]); i++) {
-      console.log(f.size);
-      files.value.push({});
-      files.value[i].filesize = f.size;
-      files.value[i].progressBarMaxValue = f.size;
-      console.log(files.value);
+      files.value.push({ filesize: f.size, progressBarMaxValue: f.size });
       parseFile(f, i);
       uploadFile(f, i);
     }
