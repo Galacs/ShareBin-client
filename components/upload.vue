@@ -21,7 +21,7 @@
         </div>
         <div id="response" ref="response" v-for="i in files">
           <div id="messages" ref="message">{{ i.message }}</div>
-          <a :href="`${i.fileurl}`">{{ i.fileurl }}</a>
+          <a :href="`${i.fileurl}`" target="_blank">{{ i.fileurl }}</a>
           <progress
             ref="pBar"
             class="progress"
