@@ -1,10 +1,10 @@
 <template>
   <div class="popup-inner">
-    <div class="container">
-      <h2 class="info filename">{{ file.filename }}</h2>
-      <h3 class="info">{{ file.fileid }}</h3>
-      <h4 class="info">{{ formatFileSize(file.size) }}</h4>
-      <h4 class="info">{{ formatDate(file.upload) }}</h4>
+    <h3 class="info filename">{{ file.filename }}</h3>
+    <h3 class="info fileid">{{ file.fileid }}</h3>
+    <h4 class="info">{{ formatFileSize(file.size) }}</h4>
+    <h4 class="info">{{ formatDate(file.upload) }}</h4>
+    <div class="buttons" valign="bottom">
       <a class="btn" :href="getLink(file.fileid)" target="_blank">Télécharger</a>
       <button class="btn delete" @click="deleteFile(file.fileid)" target="_blank">Supprimer</button>
     </div>
@@ -39,8 +39,8 @@ const formatDate = (date: Date): string => {
 };
 
 function formatFileSize(size: number): string {
-    var i = Math.floor( Math.log(size) / Math.log(1024) );
-    return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+  var i = Math.floor(Math.log(size) / Math.log(1024));
+  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 };
 
 const deleteFile = async (fileid: String) => {
@@ -62,26 +62,42 @@ const deleteFile = async (fileid: String) => {
 <style scoped>
 .filename {
   text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fileid {
+  color: grey;
 }
 
 .info {
   margin: 0px;
 }
 
-.container {
+.popup-inner {
   display: flex;
   flex-direction: column;
-}
-
-.popup-inner {
+  position:relative;
   background: #fff;
-  padding: 32px;
+  padding: 2em;
   border-radius: 10px;
   border: rgb(105, 104, 104);
   border-width: 3px;
   border-style: solid;
+  /* height: 13em; */
 }
 
+.buttons > * {
+  flex-grow: 1;
+  width: 50%;
+}
+
+.buttons {
+  padding-top: 1em;
+  padding-bottom: 0;
+  display: flex;
+  justify-content: center;
+}
 
 .btn {
   font: 13px/27px Roboto, RobotoDraft, Arial, sans-serif;
@@ -95,7 +111,6 @@ const deleteFile = async (fileid: String) => {
   line-height: 16px;
   margin-right: 8px;
   margin-top: 8px;
-  min-width: 96px;
   padding: 9px 23px;
   text-align: center;
   vertical-align: middle;

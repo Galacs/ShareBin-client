@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <div v-for="i in files" :key="i.fileid" class="popup">
+    <div v-for="i in files" :key="i.fileid" class="item">
         <fileCard :file="i" @update="update" />
       </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import fileCard from '~~/components/files/fileCard.vue'
+import fileCard from '@/components/files/fileCard.vue'
 
 import { api_url } from '@/endpoints.js';
 import { IFile } from '@/interfaces/file'
@@ -40,16 +40,13 @@ await update();
   justify-content: flex-start;
 }
 
-.popup {
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.item {
   background-color: tomato;
-  box-sizing: border-box;
   padding: 20px;
   outline: 2px solid blue;
-  /* flex: 1; */
+  flex-grow: 1;
+  min-width: 22.5em;
+  width: calc(100% * 1/6);
 }
 
 </style>
