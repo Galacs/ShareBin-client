@@ -56,7 +56,7 @@ var filename = "";
 //   console.log(filename);
 //   console.log(encodeURI(filename));
 //   console.log(file.value.files[0]);
-//   fetch(`${api_url}/files?filename=${encodeURI(filename)}&expiration=1701983624`,
+//   fetch(`${api_url}/files?filename=${encodeURIComponent(filename)}&expiration=1701983624`,
 //     {
 //       method: 'post',
 //       headers: { 'content-type': 'application/octet-stream' },
@@ -151,7 +151,7 @@ function ekUpload() {
       // Start upload
       xhr.open(
         "POST",
-        `${api_url}/files?filename=${encodeURI(
+        `${api_url}/files?filename=${encodeURIComponent(
           file.name
         )}&expiration=1701983624`,
         true
