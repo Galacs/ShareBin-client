@@ -1,4 +1,5 @@
 <template>
+    <Title>ShareBin</Title>
     <auth-status />
     <slot />
 
