@@ -346,6 +346,24 @@ form {
     margin: 0 0 0.5rem 0;
     color: $dark-text;
   }
+  #response {
+    display: flex;
+    align-items: baseline;
+    border-radius: 10px;
+    border: rgb(105, 104, 104);
+    border-width: 3px;
+    border-style: solid;
+    padding: 0.5em 1em 0;
+  }
+
+  #response > * {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  #response > div {
+    max-width: 10em;
+  }
   .btn {
     display: inline-block;
     margin: 0.5rem 0.5rem 1rem 0.5rem;

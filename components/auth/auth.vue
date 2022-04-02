@@ -18,6 +18,8 @@
 </template>
 
 <script setup>
+import { api_url } from '@/endpoints.js';
+
 const props = defineProps({
   isLogin: Boolean,
 })
@@ -30,8 +32,6 @@ let state = ref({
   error: false,
   message: "",
 });
-
-import { api_url } from '@/endpoints.js';
 
 async function post() {
       fetch(`${api_url}/auth/local/${props.isLogin ? "login" : "register"}`, 
