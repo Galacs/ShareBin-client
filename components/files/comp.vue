@@ -23,6 +23,7 @@ const update = async() => {
     .then(async res => {
       const data = await res.json();
       data.forEach(i => {i.upload = new Date(i.upload) });
+      data.forEach(i => {i.expiration = new Date(i.expiration) });
       files.value = data;
       console.log(data);
     })
