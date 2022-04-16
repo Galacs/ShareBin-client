@@ -4,6 +4,7 @@
     <h3 class="info fileid">{{ file.fileid }}</h3>
     <h4 class="info">{{ formatFileSize(file.size) }}</h4>
     <h4 class="info">{{ formatDate(file.upload) }}</h4>
+    <h4 class="info">{{ file.downloaded }}</h4>
     <div class="buttons" valign="bottom">
       <a class="btn" :href="getLink(file.fileid)" target="_blank">Télécharger</a>
       <button class="btn delete" @click="deleteFile(file.fileid)" target="_blank">Supprimer</button>
