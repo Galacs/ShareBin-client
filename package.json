@@ -6,13 +6,18 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
-    "nuxt3": "latest"
+    "@nuxtjs/eslint-config-typescript": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-vue": "^9.0.1",
+    "nuxt3": "latest",
+    "sass": "^1.49.0",
+    "typescript": "^4.7.2",
+    "vite-plugin-eslint": "^1.6.1"
   },
   "dependencies": {
-    "@typescript-eslint/parser": "^5.16.0",
-    "eslint": "^8.12.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "prettier": "^2.6.1",
-    "sass": "^1.49.0"
+    "eslint-plugin-prettier": "^4.0.0"
   }
 }
