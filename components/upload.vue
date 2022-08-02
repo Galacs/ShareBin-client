@@ -1,31 +1,22 @@
 <template>
   <div class="container">
-    <!-- <div>
-      <label>
-        File
-        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
-      </label>
-      <button v-on:click="submitFile()">Submit</button>
-      <a :href="`${fileurl}`">{{ fileurl }}</a>
-    </div>-->
-
     <form id="file-upload-form" class="uploader">
-      <input id="file-upload" type="file" name="fileUpload" accept="image/*" />
+      <input id="file-upload" type="file" name="fileUpload" accept="image/*">
 
-      <label for="file-upload" id="file-drag">
-        <img id="file-image" src="#" alt="Preview" class="hidden" />
+      <label id="file-drag" for="file-upload">
+        <img id="file-image" src="#" alt="Preview" class="hidden">
         <div id="start" ref="start">
-          <i class="fa fa-download" aria-hidden="true"></i>
+          <i class="fa fa-download" aria-hidden="true" />
           <div>Choisissez un fichier ou faite glisser</div>
           <span id="file-upload-btn" class="btn btn-primary">Choisissez un fichier</span>
         </div>
-        <div id="response" ref="response" v-for="i in files">
+        <div v-for="i in files" id="response" ref="response">
           <div id="messages" ref="message">{{ i.message }}</div>
           <a :href="`${i.fileurl}`" target="_blank">{{ i.fileurl }}</a>
           <progress
+            id="file-progress"
             ref="pBar"
             class="progress"
-            id="file-progress"
             :value="i.progressBarValue"
             :max="i.progressBarMaxValue"
           >
@@ -39,147 +30,121 @@
 </template>
 
 <script setup>
-import { api_url } from "@/endpoints.js";
+import { api_url } from '@/endpoints.js'
 
-const start = ref();
-const files = ref([]);
-const response = ref([]);
+const start = ref()
+const files = ref([])
+const response = ref([])
 
-var fileid = ref([]);
-var fileurl = ref([]);
-
-// var submitFile = async () => {
-//   console.log(filename);
-//   console.log(encodeURI(filename));
-//   console.log(file.value.files[0]);
-//   fetch(`${api_url}/files?filename=${encodeURIComponent(filename)}&expiration=1701983624`,
-//     {
-//       method: 'post',
-//       headers: { 'content-type': 'application/octet-stream' },
-//       credentials: 'include',
-//       body: file.value.files[0]
-//     })
-//     .then(async res => {
-//       const data = await res.json();
-//       if (data.success) {
-//         console.log('nice');
-//         console.log(data);
-//         fileid.value = data.fileid;
-//         fileurl.value = data.url;
-//       }
-//       else {
-//         console.log(data);
-//       }
-//     })
-//   console.log("ye");
-// }
+const fileid = ref([])
+const fileurl = ref([])
 
 // File Upload
 //
-function ekUpload() {
-  function Init() {
-    console.log("Upload Initialised");
+function ekUpload () {
+  function Init () {
+    console.log('Upload Initialised')
 
-    var fileSelect = document.getElementById("file-upload"),
-      fileDrag = document.getElementById("file-drag");
+    const fileSelect = document.getElementById('file-upload')
+    const fileDrag = document.getElementById('file-drag')
 
-    fileSelect.addEventListener("change", fileSelectHandler, false);
+    fileSelect.addEventListener('change', fileSelectHandler, false)
 
     // Is XHR2 available?
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest()
     if (xhr.upload) {
       // File Drop
-      fileDrag.addEventListener("dragover", fileDragHover, false);
-      fileDrag.addEventListener("dragleave", fileDragHover, false);
-      fileDrag.addEventListener("drop", fileSelectHandler, false);
+      fileDrag.addEventListener('dragover', fileDragHover, false)
+      fileDrag.addEventListener('dragleave', fileDragHover, false)
+      fileDrag.addEventListener('drop', fileSelectHandler, false)
     }
   }
 
-  function fileDragHover(e) {
-    var fileDrag = document.getElementById("file-drag");
+  function fileDragHover (e) {
+    const fileDrag = document.getElementById('file-drag')
 
-    e.stopPropagation();
-    e.preventDefault();
+    e.stopPropagation()
+    e.preventDefault()
 
     fileDrag.className =
-      e.type === "dragover" ? "hover" : "modal-body file-upload";
+      e.type === 'dragover' ? 'hover' : 'modal-body file-upload'
   }
 
-  function fileSelectHandler(e) {
+  function fileSelectHandler (e) {
     // Fetch FileList object
-    var filesd = e.target.files || e.dataTransfer.files;
+    const filesd = e.target.files || e.dataTransfer.files
 
     // Cancel event and hover styling
-    fileDragHover(e);
+    fileDragHover(e)
 
-    files.value = [];
+    files.value = []
     // Process all File objects
     for (var i = 0, f; (f = filesd[i]); i++) {
-      files.value.push({ filesize: f.size, progressBarMaxValue: f.size });
-      parseFile(f, i);
-      uploadFile(f, i);
+      files.value.push({ filesize: f.size, progressBarMaxValue: f.size })
+      parseFile(f, i)
+      uploadFile(f, i)
     }
   }
 
-  function parseFile(file, i) {
-    files.value[i].message = file.name;
-    start.value.classList.add("hidden");
+  function parseFile (file, i) {
+    files.value[i].message = file.name
+    start.value.classList.add('hidden')
   }
 
-  function updateFileProgress(i, e) {
+  function updateFileProgress (i, e) {
     if (e.lengthComputable) {
-      files.value[i].progressBarValue = e.loaded;
+      files.value[i].progressBarValue = e.loaded
     }
   }
 
-  function uploadFile(file, i) {
-    var xhr = new XMLHttpRequest();
+  function uploadFile (file, i) {
+    const xhr = new XMLHttpRequest()
     if (xhr.upload) {
       xhr.upload.addEventListener(
-        "progress",
+        'progress',
         updateFileProgress.bind(null, i),
         false
-      );
+      )
 
       // Start upload
       xhr.open(
-        "POST",
+        'POST',
         `${api_url}/files?filename=${encodeURIComponent(
           file.name
         )}&expiration=1701983624`,
         true
-      );
+      )
       // xhr.setRequestHeader('X-File-Name', file.name);
       // xhr.setRequestHeader('X-File-Size', file.size);
-      xhr.setRequestHeader("Content-Type", "application/octet-stream");
-      xhr.withCredentials = true;
-      xhr.responseType = "json";
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream')
+      xhr.withCredentials = true
+      xhr.responseType = 'json'
       xhr.onreadystatechange = () => {
         return (function () {
           if (xhr.readyState === 4) {
-            console.log(xhr.response.url);
-            files.value[i].fileurl = xhr.response.url;
-            fileid.value.push(xhr.response.fileid);
-            fileurl.value.push(xhr.response.url);
+            console.log(xhr.response.url)
+            files.value[i].fileurl = xhr.response.url
+            fileid.value.push(xhr.response.fileid)
+            fileurl.value.push(xhr.response.url)
           }
-        })(i);
-      };
-      console.log("sending....");
-      xhr.send(file);
-      console.log("sent");
+        })(i)
+      }
+      console.log('sending....')
+      xhr.send(file)
+      console.log('sent')
     }
   }
 
   // Check for the various File API support.
   if (process.client) {
     if (window.File && window.FileList && window.FileReader) {
-      Init();
+      Init()
     } else {
-      document.getElementById("file-drag").style.display = "none";
+      document.getElementById('file-drag').style.display = 'none'
     }
   }
 }
-ekUpload();
+ekUpload()
 </script>
 
 <style scoped lang="scss">
