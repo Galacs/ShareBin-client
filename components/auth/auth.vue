@@ -1,11 +1,19 @@
 <template>
   <div class="container">
-    <h2 v-if="isLogin">Se connecter</h2>
-    <h2 v-else>S'enregistrer</h2>
-    <input @keyup.enter="post" v-model="username" type="text" placeholder="Nom d'utilisateur" />
-    <input @keyup.enter="post" v-model="password" type="password" placeholder="Mot de passe" />
-    <button class="login-btn" v-if="props.isLogin" @click="post">Se connecter</button>
-    <button class="login-btn" v-else               @click="post">S'enregistrer</button>
+    <h2 v-if="isLogin">
+      Se connecter
+    </h2>
+    <h2 v-else>
+      S'enregistrer
+    </h2>
+    <input v-model="username" type="text" placeholder="Nom d'utilisateur" @keyup.enter="post">
+    <input v-model="password" type="password" placeholder="Mot de passe" @keyup.enter="post">
+    <button v-if="props.isLogin" class="login-btn" @click="post">
+      Se connecter
+    </button>
+    <button v-else class="login-btn" @click="post">
+      S'enregistrer
+    </button>
     <div v-if="state.success" class="success state">
       {{ state.message }}
     </div>
@@ -18,49 +26,48 @@
 </template>
 
 <script setup>
-import { api_url } from '@/endpoints.js';
+import { api_url } from '@/endpoints.js'
 
 const props = defineProps({
-  isLogin: Boolean,
+  isLogin: Boolean
 })
 
-let username = ref();
-let password = ref();
+const username = ref()
+const password = ref()
 
-let state = ref({
+const state = ref({
   success: false,
   error: false,
-  message: "",
-});
+  message: ''
+})
 
-async function post() {
-      fetch(`${api_url}/auth/local/${props.isLogin ? "login" : "register"}`, 
-        {
-          method: 'post',
-          headers: { 'content-type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ 
-            username: username.value, 
-            password: password.value,
-          }),
-        })
-        .then(async res => {
-          const data = await res.json();
-          if (data.success) {
-            console.log('nice');
-            console.log(data);
-            state.value.success = true;
-            state.value.error = false;
-            state.value.message = "Connection réussite"
-          }
-          else {
-            console.log(data);
-            state.value.error = true;
-            state.value.success = false;
-            state.value.message = data.msg;
-          }
-        })
-    };
+async function post () {
+  fetch(`${api_url}/auth/local/${props.isLogin ? 'login' : 'register'}`,
+    {
+      method: 'post',
+      headers: { 'content-type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value
+      })
+    })
+    .then(async (res) => {
+      const data = await res.json()
+      if (data.success) {
+        console.log('nice')
+        console.log(data)
+        state.value.success = true
+        state.value.error = false
+        state.value.message = 'Connection réussite'
+      } else {
+        console.log(data)
+        state.value.error = true
+        state.value.success = false
+        state.value.message = data.msg
+      }
+    })
+}
 </script>
 
 <style scoped>
@@ -116,7 +123,6 @@ input {
 .success {
   background-color: rgb(106, 236, 31);
 }
-
 
 .login-btn {
   font: 13px/27px Roboto,RobotoDraft,Arial,sans-serif;
