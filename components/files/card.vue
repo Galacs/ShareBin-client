@@ -1,105 +1,81 @@
 <template>
-  <div class="popup-inner">
-    <h3 class="info filename">{{ file.filename }}</h3>
-    <h3 class="info fileid">{{ file.fileid }}</h3>
-    <h4 class="info">{{ formatFileSize(file.size) }}</h4>
-    <h4 class="info">{{ formatDate(file.upload) }}</h4>
-    <h4 class="info">{{ file.downloaded }}</h4>
-    <div class="buttons" valign="bottom">
-      <a class="btn" :href="getLink(file.fileid)" target="_blank">Télécharger</a>
-      <button class="btn delete" @click="deleteFile(file.fileid)" target="_blank">Supprimer</button>
+  <div
+    class="flex flex-col relative bg-white
+    p-8 rounded-xl border-gray-500 border-2"
+  >
+    <h3 class="truncate">
+      {{ file.filename }}
+    </h3>
+    <h3 class="truncate text-gray-400">
+      {{ file.fileid }}
+    </h3>
+    <h4 class="">
+      {{ formatFileSize(file.size) }}
+    </h4>
+    <h4 class="">
+      {{ formatDate(file.upload) }}
+    </h4>
+    <h4 class="">
+      {{ file.downloaded }}
+    </h4>
+    <div class="pt-4 pb-0 flex justify-center">
+      <NuxtLink class="btn bg-blue-500 grow" :to="getLink(file.fileid)" target="_blank">
+        Télécharger
+      </NuxtLink>
+      <button class="btn bg-red-600 grow" target="_blank" @click="deleteFile(file.fileid)">
+        Supprimer
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { api_url } from "@/endpoints.js";
-import { IFile } from "@/interfaces/file";
+import { apiUrl } from '@/endpoints.js'
+import { IFile } from '@/interfaces/file'
 
 const props = defineProps<{
   file: IFile;
-}>();
+}>()
 
-const emit = defineEmits<{
-  (e: "update"): void;
-}>();
+const emit = defineEmits<{(e: 'update')}>()
 
-const getLink = (fileid: String) => {
-  return `${api_url}/files/${fileid}`;
-};
+const getLink = (fileid: string) => {
+  return `/files/${fileid}`
+}
 
 const formatDate = (date: Date): string => {
-  return date.toLocaleDateString("fr-FR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-  });
-};
+  return date.toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  })
+}
 
-function formatFileSize(size: number): string {
-  var i = Math.floor(Math.log(size) / Math.log(1024));
-  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-};
+function formatFileSize (size: number): string {
+  const i = Math.floor(Math.log(size) / Math.log(1024))
+  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+}
 
-const deleteFile = async (fileid: String) => {
-  fetch(`${api_url}/files/${fileid}`, {
-    method: "delete",
-    credentials: "include",
+const deleteFile = (fileid: string) => {
+  fetch(`${apiUrl}/files/${fileid}`, {
+    method: 'delete',
+    credentials: 'include'
   }).then(async (res) => {
-    const data = await res.json();
+    const data = await res.json()
     if (data.success) {
-      console.log(data);
-      emit("update");
+      console.log(data)
+      emit('update')
     } else {
-      console.log(data);
+      console.log(data)
     }
-  });
-};
+  })
+}
 </script>
 
 <style scoped>
-.filename {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.fileid {
-  color: grey;
-}
-
-.info {
-  margin: 0px;
-}
-
-.popup-inner {
-  display: flex;
-  flex-direction: column;
-  position:relative;
-  background: #fff;
-  padding: 2em;
-  border-radius: 10px;
-  border: rgb(105, 104, 104);
-  border-width: 3px;
-  border-style: solid;
-  /* height: 13em; */
-}
-
-.buttons > * {
-  flex-grow: 1;
-  width: 50%;
-}
-
-.buttons {
-  padding-top: 1em;
-  padding-bottom: 0;
-  display: flex;
-  justify-content: center;
-}
-
 .btn {
   font: 13px/27px Roboto, RobotoDraft, Arial, sans-serif;
   white-space: nowrap;
@@ -119,15 +95,10 @@ const deleteFile = async (fileid: String) => {
   box-sizing: border-box;
   border: 1px solid transparent;
   margin-left: 8px;
-  background: #2b7de9;
   box-shadow: 0 1px 2px 0 rgba(66, 133, 244, 0.3),
     0 1px 3px 1px rgba(66, 133, 244, 0.15);
   text-decoration: none;
   color: #fff;
   cursor: pointer;
-}
-
-.delete {
-  background: #e92323;
 }
 </style>
