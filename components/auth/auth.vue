@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { api_url } from '@/endpoints.js'
+import { apiUrl } from '@/endpoints.js'
 
 const props = defineProps({
   isLogin: Boolean
@@ -42,7 +42,7 @@ const state = ref({
 })
 
 async function post () {
-  fetch(`${api_url}/auth/local/${props.isLogin ? 'login' : 'register'}`,
+  fetch(`${apiUrl}/auth/local/${props.isLogin ? 'login' : 'register'}`,
     {
       method: 'post',
       headers: { 'content-type': 'application/json' },

@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { api_url } from '@/endpoints.js';
+import { apiUrl } from '@/endpoints.js';
 
 var text = "Login"
 
@@ -37,7 +37,7 @@ var login = () => {
 }
 
 var check = async() => {
-  fetch(`${api_url}/protected`, 
+  fetch(`${apiUrl}/protected`, 
     {
       method: 'get',
       credentials: 'include',

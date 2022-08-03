@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { api_url } from '@/endpoints.js'
+import { apiUrl } from '@/endpoints.js'
 
 const start = ref()
 const files = ref([])
@@ -109,7 +109,7 @@ function ekUpload () {
       // Start upload
       xhr.open(
         'POST',
-        `${api_url}/files?filename=${encodeURIComponent(
+        `${apiUrl}/files?filename=${encodeURIComponent(
           file.name
         )}&expiration=1701983624`,
         true

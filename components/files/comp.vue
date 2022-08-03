@@ -9,13 +9,13 @@
 <script setup lang="ts">
 import fileCard from '~~/components/files/card.vue'
 
-import { api_url } from '@/endpoints.js';
+import { apiUrl } from '@/endpoints.js';
 import { IFile } from '@/interfaces/file'
 
 var files = ref<Array<IFile>>();
 
 const update = async() => {
-  fetch(`${api_url}/account/files`,
+  fetch(`${apiUrl}/account/files`,
     {
       method: 'get',
       credentials: 'include',
