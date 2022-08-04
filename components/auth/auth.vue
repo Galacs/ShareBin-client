@@ -1,23 +1,14 @@
 <template>
   <div class="flex flex-col text-left mb-5 relative w-full">
-    <h2 v-if="isLogin">
-      Se connecter
-    </h2>
-    <h2 v-else>
-      S'enregistrer
+    <h2>
+      {{ isLogin ? 'Se connecter' : "S'enregistrer" }}
     </h2>
     <input v-model="username" type="text" placeholder="Nom d'utilisateur" @keyup.enter="post">
     <input v-model="password" type="password" placeholder="Mot de passe" @keyup.enter="post">
-    <button v-if="props.isLogin" class="login-btn" @click="post">
-      Se connecter
+    <button class="login-btn" @click="post">
+      {{ isLogin ? 'Se connecter' : "S'enregistrer" }}
     </button>
-    <button v-else class="login-btn" @click="post">
-      S'enregistrer
-    </button>
-    <div v-if="state.success" class="success state">
-      {{ state.message }}
-    </div>
-    <div v-if="state.error" class="error state">
+    <div v-if="state" :class="{ error: state.error, success: state.success}" class="state">
       {{ state.message }}
     </div>
   </div>
