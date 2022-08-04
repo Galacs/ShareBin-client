@@ -1,8 +1,5 @@
 <template>
   <div class="flex flex-row flex-wrap justify-start">
-    <button @click="refresh()">
-      refresh
-    </button>
     <div
       v-for="i in files"
       :key="i.fileid"
