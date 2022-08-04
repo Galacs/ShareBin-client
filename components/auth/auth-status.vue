@@ -19,49 +19,40 @@
     >
       <auth :is-login="false" class="AuthComponent" />
     </auth-dialog>
-    <button v-if="!isLoggedIn" class="login-btn" @click="login()">
-      {{ text }}
+    <button class="login-btn" @click="login()">
+      {{ username || 'Login' }}
     </button>
-    <div v-if="isLoggedIn" class="login-btn">
-      {{ username }}
-    </div>
   </div>
 </template>
 
 <script setup>
-import { apiUrl } from '@/endpoints.js'
+import { storeToRefs } from 'pinia'
 
-const text = 'Login'
+import { apiUrl } from '@/endpoints.js'
+import { useUserStore } from '@/store/user.ts'
 
 const loginDialog = ref(false)
 const registerDialog = ref(false)
 
-const isLoggedIn = ref(false)
-
-const username = ref()
+const { username } = storeToRefs(useUserStore())
 
 const login = () => {
-  if (!isLoggedIn.value) { loginDialog.value = true }
+  if (!username.value) { loginDialog.value = true }
 }
 
-if (process.server) {
-  const { data, refresh } = await useFetch(`${apiUrl}/protected`,
-    {
-      method: 'get',
-      headers: useRequestHeaders(['cookie'])
-    })
-
-  watch(data, (newData) => {
-    if (newData.success) {
-      isLoggedIn.value = true
-      username.value = newData.username
-    } else {
-      isLoggedIn.value = false
-    }
+const { data, refresh } = await useFetch(`${apiUrl}/protected`,
+  {
+    method: 'get',
+    headers: useRequestHeaders(['cookie'])
   })
 
+if (data.value.success) {
+  username.value = data.value.username
+}
+if (process.server) {
   refresh()
 }
+
 </script>
 
 <style scoped>
