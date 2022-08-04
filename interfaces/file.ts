@@ -5,5 +5,6 @@ export interface IFile {
     upload: Date,
     expiration: Date,
     size: number,
-    downloaded: number
+    downloaded: number,
+    mime: string
 }
