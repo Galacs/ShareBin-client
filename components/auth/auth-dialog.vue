@@ -47,6 +47,7 @@ defineEmits(['close', 'switch'])
 .popup .popup-inner {
   background: #fff;
   padding: 32px;
+  padding-top: 20px;
   border-radius: 10px;
   border: rgb(105, 104, 104);
   border-width: 3px;

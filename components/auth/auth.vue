@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col text-left mb-5 relative w-full">
-    <h2>
+    <h2 class="text-2xl font-bold">
       {{ isLogin ? 'Se connecter' : "S'enregistrer" }}
     </h2>
     <input v-model="username" type="text" placeholder="Nom d'utilisateur" @keyup.enter="post">
