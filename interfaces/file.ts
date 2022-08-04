@@ -4,5 +4,6 @@ export interface IFile {
     filename: string,
     upload: Date,
     expiration: Date,
-    size: number
+    size: number,
+    downloaded: number
 }
