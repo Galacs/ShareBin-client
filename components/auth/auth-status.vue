@@ -46,9 +46,12 @@ const { data, refresh } = await useFetch(`${apiUrl}/protected`,
     headers: useRequestHeaders(['cookie'])
   })
 
-if (data.value.success) {
-  username.value = data.value.username
-}
+try {
+  if (data.value.success) {
+    username.value = data.value.username
+  }
+} catch (e) {}
+
 if (process.server) {
   refresh()
 }
