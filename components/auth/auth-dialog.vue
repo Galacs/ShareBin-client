@@ -16,10 +16,10 @@
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  isLogin: Boolean
-})
+<script setup lang="ts">
+const props = defineProps<{
+  isLogin: boolean
+}>()
 
 const isLogin = toRef(props, 'isLogin')
 

@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
 import { apiUrl } from '@/endpoints.js'
@@ -31,9 +31,9 @@ import { useUserStore } from '@/store/user'
 
 const { username: storeUsername } = storeToRefs(useUserStore())
 
-const props = defineProps({
-  isLogin: Boolean
-})
+const props = defineProps<{
+  isLogin: boolean
+}>()
 
 defineEmits(['close'])
 
