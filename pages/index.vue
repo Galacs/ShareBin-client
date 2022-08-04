@@ -3,7 +3,7 @@
     <Welcome />
     <Upload />
     <h2 class="text-center text-2xl m-8 font-bold">Liste des fichiers</h2>
-    <FilesComp />
+    <FilesComp class="w-3/4" />
   </div>
 </template>
 
