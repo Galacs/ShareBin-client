@@ -116,7 +116,7 @@ function ekUpload () {
       )
       // xhr.setRequestHeader('X-File-Name', file.name);
       // xhr.setRequestHeader('X-File-Size', file.size);
-      xhr.setRequestHeader('Content-Type', 'application/octet-stream')
+      // xhr.setRequestHeader('Content-Type', 'application/octet-stream')
       xhr.withCredentials = true
       xhr.responseType = 'json'
       xhr.onreadystatechange = () => {
