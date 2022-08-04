@@ -1,66 +1,67 @@
 <template>
   <div>
-    <auth-dialog v-if="loginDialog" :dialog="() => loginDialog = false" :isLogin="loginDialog"
-    :close="() => { registerDialog = false; loginDialog = false; check() }"
-    :setregisterDialog="() => {registerDialog = true; loginDialog=false}"
+    <auth-dialog
+      v-if="loginDialog"
+      :dialog="() => loginDialog = false"
+      :is-login="loginDialog"
+      :close="() => { registerDialog = false; loginDialog = false; refresh() }"
+      :setregister-dialog="() => {registerDialog = true; loginDialog=false}"
     >
-      <auth :isLogin='true' class="AuthComponent"/>
+      <auth :is-login="true" class="AuthComponent" />
     </auth-dialog>
 
-    <auth-dialog v-if="registerDialog" :dialog="() => loginDialog = false" :isLogin="loginDialog"
-    :close="() => { registerDialog = false; loginDialog = false; check() }"
-    :setdialog="() => {registerDialog = false; loginDialog=true}"
+    <auth-dialog
+      v-if="registerDialog"
+      :dialog="() => loginDialog = false"
+      :is-login="loginDialog"
+      :close="() => { registerDialog = false; loginDialog = false; refresh() }"
+      :setdialog="() => {registerDialog = false; loginDialog=true}"
     >
-      <auth :isLogin='false' class="AuthComponent"/>
+      <auth :is-login="false" class="AuthComponent" />
     </auth-dialog>
-      <button v-if="!isLoggedIn" @click="login()" class="login-btn">{{ text }}</button>
-      <div class="login-btn" v-if="isLoggedIn">
-        {{ username }}
-      </div>
+    <button v-if="!isLoggedIn" class="login-btn" @click="login()">
+      {{ text }}
+    </button>
+    <div v-if="isLoggedIn" class="login-btn">
+      {{ username }}
+    </div>
   </div>
 </template>
 
 <script setup>
-import { apiUrl } from '@/endpoints.js';
+import { apiUrl } from '@/endpoints.js'
 
-var text = "Login"
+const text = 'Login'
 
-var loginDialog = ref(false)
-var registerDialog = ref(false)
+const loginDialog = ref(false)
+const registerDialog = ref(false)
 
-var isLoggedIn = ref(false)
+const isLoggedIn = ref(false)
 
-var username = ref();
+const username = ref()
 
-var login = () => {
-  if (!isLoggedIn.value) loginDialog.value = true
+const login = () => {
+  if (!isLoggedIn.value) { loginDialog.value = true }
 }
 
-var check = async() => {
-  fetch(`${apiUrl}/protected`, 
+if (process.server) {
+  const { data, refresh } = await useFetch(`${apiUrl}/protected`,
     {
       method: 'get',
-      credentials: 'include',
+      headers: useRequestHeaders(['cookie'])
     })
-    .then(async res => {
-      const data = await res.json();
-      if (data.success) {
-        isLoggedIn.value = true
-        username.value = data.username;
-        console.log(data);
-      }
-      else {
-        isLoggedIn.value = false;
-        console.log(data);
-      }
-    })
-    .catch(async e => {
-      // console.log("no tings")
-    });
+
+  watch(data, (newData) => {
+    if (newData.success) {
+      isLoggedIn.value = true
+      username.value = newData.username
+    } else {
+      isLoggedIn.value = false
+    }
+  })
+
+  refresh()
 }
-
-await check();
-
 </script>
 
 <style scoped>
