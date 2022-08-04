@@ -1,24 +1,13 @@
 <template>
   <div>
     <auth-dialog
-      v-if="loginDialog"
-      :dialog="() => loginDialog = false"
-      :is-login="loginDialog"
-      :close="() => { registerDialog = false; loginDialog = false; refresh() }"
-      :setregister-dialog="() => {registerDialog = true; loginDialog=false}"
+      v-if="registerDialog || loginDialog"
+      @close="() => { loginDialog = false; registerDialog = false }"
+      @switch="() => [loginDialog, registerDialog] = [registerDialog, loginDialog]"
     >
-      <auth :is-login="true" class="AuthComponent" />
+      <auth :is-login="loginDialog" class="AuthComponent" />
     </auth-dialog>
 
-    <auth-dialog
-      v-if="registerDialog"
-      :dialog="() => loginDialog = false"
-      :is-login="loginDialog"
-      :close="() => { registerDialog = false; loginDialog = false; refresh() }"
-      :setdialog="() => {registerDialog = false; loginDialog=true}"
-    >
-      <auth :is-login="false" class="AuthComponent" />
-    </auth-dialog>
     <button class="login-btn" @click="login()">
       {{ username || 'Login' }}
     </button>
@@ -40,20 +29,18 @@ const login = () => {
   if (!username.value) { loginDialog.value = true }
 }
 
-const { data, refresh } = await useFetch(`${apiUrl}/protected`,
-  {
-    method: 'get',
-    headers: useRequestHeaders(['cookie'])
-  })
-
-try {
-  if (data.value.success) {
-    username.value = data.value.username
-  }
-} catch (e) {}
-
 if (process.server) {
-  refresh()
+  const { data } = await useFetch(`${apiUrl}/protected`,
+    {
+      method: 'get',
+      headers: useRequestHeaders(['cookie'])
+    })
+
+  try {
+    if (data.value.success) {
+      username.value = data.value.username
+    }
+  } catch (e) {}
 }
 
 </script>

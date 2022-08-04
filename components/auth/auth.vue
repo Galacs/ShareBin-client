@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="flex flex-col text-left mb-5 relative w-full">
     <h2 v-if="isLogin">
       Se connecter
     </h2>
@@ -20,17 +20,22 @@
     <div v-if="state.error" class="error state">
       {{ state.message }}
     </div>
-    <!-- <h1>{{ username }}</h1>
-    <h1>{{ password }}</h1> -->
   </div>
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'
+
 import { apiUrl } from '@/endpoints.js'
+import { useUserStore } from '@/store/user'
+
+const { username: storeUsername } = storeToRefs(useUserStore())
 
 const props = defineProps({
   isLogin: Boolean
 })
+
+defineEmits(['close'])
 
 const username = ref()
 const password = ref()
@@ -41,8 +46,8 @@ const state = ref({
   message: ''
 })
 
-async function post () {
-  fetch(`${apiUrl}/auth/local/${props.isLogin ? 'login' : 'register'}`,
+const post = async () => {
+  await fetch(`${apiUrl}/auth/local/${props.isLogin ? 'login' : 'register'}`,
     {
       method: 'post',
       headers: { 'content-type': 'application/json' },
@@ -55,11 +60,10 @@ async function post () {
     .then(async (res) => {
       const data = await res.json()
       if (data.success) {
-        console.log('nice')
-        console.log(data)
         state.value.success = true
         state.value.error = false
         state.value.message = 'Connection réussite'
+        storeUsername.value = data.username
       } else {
         console.log(data)
         state.value.error = true
@@ -74,15 +78,6 @@ async function post () {
 button {
   position: inherit;
   margin: 0;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 20px;
-  position: relative;
-  width: 100%;
 }
 
 h2 {
