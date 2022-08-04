@@ -1,2 +1,2 @@
-export const apiUrl = "https://sharebin-server-prod.ait-younes.fr";
-// export const apiUrl = "http://localhost:1500";
+export const apiUrl = 'https://sharebin.ait-younes.fr/api'
+// export const apiUrl = "https://sharebin-server.ait-younes.fr/api";
