@@ -8,7 +8,7 @@
     <button class="login-btn" @click="post">
       {{ isLogin ? 'Se connecter' : "S'enregistrer" }}
     </button>
-    <div v-if="state" :class="{ error: state.error, success: state.success}" class="state">
+    <div v-if="state.success || state.error" :class="{ error: state.error, success: state.success}" class="state">
       {{ state.message }}
     </div>
   </div>
@@ -95,6 +95,7 @@ input {
   border-radius: 15px;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0.158);
+  border-width: 3px;
   font-family: Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
   font-weight: 500;
   font-size: 14px;
